@@ -16,6 +16,7 @@ df1.sort_values(by='Date', inplace=True, ascending=True)
 plt.plot(df1.Date, df1.Births)
 plt.xlabel('Date')
 plt.ylabel('Births')
+plt.title('Number of daily female births in California in 1959 and 1960')
 plt.show()
 
 X = df1[['id']].values.reshape(-1,1)
