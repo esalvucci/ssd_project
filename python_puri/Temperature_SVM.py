@@ -1,9 +1,6 @@
 import pandas as pd
 import numpy as np
-from datetime import datetime
 import matplotlib.pyplot as plt
-import pyEX as p
-import plotly.express as px
 from sklearn.model_selection import train_test_split
 from sklearn.svm import SVC
 from sklearn.metrics import classification_report, confusion_matrix
@@ -12,23 +9,25 @@ url = 'https://raw.githubusercontent.com/okHotel/ssd_project/master/data_set/dai
 df = pd.read_csv(url, names=['Date', 'Temp'], skiprows=2556) #carico solo i dati degli ultimi 3 anni
 df = df.sort_values(by=['Date']) #ordino i record in base alla data
 
+#print(df.head())
+plt.plot(df.Temp)
+plt.title('Temperature trend over 3 years')
+plt.ylabel('Temperature')
+plt.show()
+
 w = 20
 rmean = df.Temp.rolling(window=w, min_periods=1).mean() #calcolo la media mobile
 rstd = df.Temp.rolling(window=w, min_periods=1).std() #calcolo la deviazione standard mobile
 df['rmean'] = rmean
 df['rstd'] = rstd
 
-#df.head()
-#fig = px.line(df, x = 'Date', y = 'Temp', title='Mininum temperature trend of Melbourne')
-#fig.show()
-
-# SVM prevision
 plt.plot(df.Temp, color='blue', label='Dataset')
 plt.plot(df.rmean, color='orange', label='Rolling Mean (20)')
 plt.plot(df.rstd, color='green', label='Rolling Standard Deviation (20)')
 plt.legend(loc='upper left')
 plt.show()
 
+# SVM prevision
 # Riformatto i Dati in un nuovo DataFrame
 df1 = pd.DataFrame()
 df1['Date'] = df.Date.copy()
@@ -47,7 +46,7 @@ df1['UpperBound'] = df1['Prev'] + df1['Dev Standard'] # upper bound del range en
 
 pred = (df1['Temp'] >= df1['LowerBound']) & (df1['Temp'] <= df1['UpperBound']) # predicato per verificare se il dato è dentro al range
 df1['Class'] = np.where(pred, '1', '0') # predicato soddisfatto mette 1 altrimenti 0
-df1.head()
+print(df1.head())
 
 plt.plot(df1.Prev, color='orange', label='Prev')
 plt.plot(df1.LowerBound, color='blue')
@@ -65,8 +64,9 @@ classifier = SVC(kernel='rbf', C=100, gamma=0.2) # classifier definition
 classifier.fit(X_train, Y_train) # classifier training
 y_pred = classifier.predict(X_test) # classifier prevision
 
-print(confusion_matrix(Y_test,y_pred)) # confusion matrix 
-print(classification_report(Y_test,y_pred)) # classification properties
+print('\n')
+print('Confisuin matrix\n ', confusion_matrix(Y_test,y_pred)) # confusion matrix 
+print('Classification report\n', classification_report(Y_test,y_pred)) # classification properties
 # precision = TP / TP + FP
 # recall = TP / TP + FN
 # f1 = 2* (Prec * Rec) / (Prec + Rec)
