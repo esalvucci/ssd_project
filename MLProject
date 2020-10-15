@@ -1,0 +1,25 @@
+name: stock_forecast
+
+conda_env: config/mlflow_env.yaml
+# Can have a docker_env instead of a conda_env, e.g.
+# docker_env:
+#    image:  mlflow-docker-example
+
+entry_points:
+  main:
+    parameters:
+      linear_regression_jobs_number: {type: float, default: -1}
+      quadratic_regression_polynomial_features_2: {type: float, default: 2}
+      quadratic_regression_polynomial_features_3: {type: float, default: 3}
+      knn_regression: {type: float, default: 2}
+
+    command: "python main.py {linear_regression_jobs_number} {quadratic_regression_polynomial_features_2} {quadratic_regression_polynomial_features_3}
+              {knn_regression}"
+#      data_file: path
+#      regularization: {type: float, default: 0.1}
+#    command: "python main.py -r {regularization} {data_file}"
+
+  validate:
+    parameters:
+      data_file: path
+    command: "python validate.py {data_file}"

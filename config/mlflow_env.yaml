@@ -1,0 +1,14 @@
+name: mlflow
+dependencies:
+  - python=3.8
+  - pip
+  - lxml
+  - requests>=2.19.0
+  - pandas
+  - pandas-datareader
+  - matplotlib
+  - numpy
+  - scikit-learn
+  - pip:
+      - sklearn
+      - mlflow
