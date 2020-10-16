@@ -1,4 +1,7 @@
-name: mlflow
+name: mlflow-env
+channels:
+  - defaults
+  - anaconda
 dependencies:
   - python=3.8
   - pip

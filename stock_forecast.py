@@ -24,6 +24,8 @@ X = df1[['id']].values.reshape(-1, 1)
 y = df1[['Adj Close']].values.reshape(-1, 1).ravel()
 X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.3, random_state=0)
 
+df1[['Date', 'Adj Close']].to_json("/tmp/df.json", orient='split')
+
 kernel = sys.argv[1]
 C = int(sys.argv[2])
 gamma = sys.argv[3]
@@ -31,6 +33,7 @@ epsilon = float(sys.argv[4])
 
 
 with mlflow.start_run():
+    mlflow.set_experiment('/mlflow_test/forecast_example')
 
     mlflow.log_param("kernel", kernel)
     mlflow.log_param("C", C)
@@ -47,4 +50,4 @@ with mlflow.start_run():
     print('SVR performance evaluation')
     print(explained_variance_score(y_test, y_pred))
     mlflow.log_metric("explained variance score - should be near 1", explained_variance_score(y_test, y_pred))
-    mlflow.sklearn.log_model(regressor, "svr regressor")
+    mlflow.sklearn.log_model(regressor, "svr_regressor")
