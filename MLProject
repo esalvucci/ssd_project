@@ -8,13 +8,11 @@ conda_env: config/mlflow_env.yaml
 entry_points:
   main:
     parameters:
-      linear_regression_jobs_number: {type: float, default: -1}
-      quadratic_regression_polynomial_features_2: {type: float, default: 2}
-      quadratic_regression_polynomial_features_3: {type: float, default: 3}
-      knn_regression: {type: float, default: 2}
-
-    command: "python main.py {linear_regression_jobs_number} {quadratic_regression_polynomial_features_2} {quadratic_regression_polynomial_features_3}
-              {knn_regression}"
+      kernel: {type: string, default: 'rbf'}
+      C: {type: float, default: 100}
+      gamma: {type: string, default: 'scale'}
+      epsilon: {type: float, default: .1}
+    command: "python stock_forecast.py {kernel} {C} {gamma} {epsilon}"
 #      data_file: path
 #      regularization: {type: float, default: 0.1}
 #    command: "python main.py -r {regularization} {data_file}"
